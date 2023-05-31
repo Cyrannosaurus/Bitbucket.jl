@@ -1,0 +1,13 @@
+name = "Bitbucket"
+uuid = "f9636d6d-b095-4210-887d-4261faeb0457"
+authors = ["Conrad Wiebe"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1.9"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
