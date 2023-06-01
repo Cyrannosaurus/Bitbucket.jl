@@ -252,7 +252,7 @@ function GetRole(person::Person, pr::PullRequest)::ParticipationType
 end
 
 function ParsePullRequest(data::Dict{String, Any})::PullRequest
-	PullRequest(data["title"], data["links"]["self"][1]["href"], GetAuthor(data), GetReviewers(data), GetParticipants(data), parse(PullRequestState, data["state"]), unix2datetime(data["createdDate"] / 1000),  unix2datetime(data["updatedDate"] / 1000), Repository(data["toRef"]["repository"]["slug"], data["toRef"]["repository"]["project"]["key"]))
+	PullRequest(data["title"], data["links"]["self"][1]["href"], GetAuthor(data), GetReviewers(data), GetParticipants(data), parse(PullRequestStatus, data["state"]), unix2datetime(data["createdDate"] / 1000),  unix2datetime(data["updatedDate"] / 1000), Repository(data["toRef"]["repository"]["slug"], data["toRef"]["repository"]["project"]["key"]))
 end
 
 end
