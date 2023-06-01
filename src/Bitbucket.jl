@@ -8,7 +8,7 @@ export Approved, UnApproved, NeedsWork
 export Author, Reviewer, Participant, NotOnPR
 export Open, Declind, Merged
 
-export GetRepoPRs, GetUserPRs, GetRole, Authenticate
+export GetRepoPRs, GetUserPRs, GetRole, Authenticate, GetAllPeopleOnPR
 
 """
 A struct to represent the person running the queries.
