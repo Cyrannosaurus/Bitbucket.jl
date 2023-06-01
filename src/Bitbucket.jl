@@ -74,6 +74,11 @@ struct PullRequest
 	repo::Repository
 end
 
+"""
+    Authenticate(user::User)::AuthenticatedUser
+
+Generates the auth token required by the API. Returns the user + token in a wrapper struct.
+"""
 function Authenticate(user::User)::AuthenticatedUser
 	AuthenticatedUser(user, base64encode("$(user.username):$(user.token)"))
 end
@@ -84,6 +89,13 @@ function CheckPRState(state::AbstractString)
 	end
 end
 
+"""
+    GetUserPRs(user::AuthenticatedUser, base_address::AbstractString; state::AbstractString="ALL", start_date::Union{Date, DateTime}=(now()-Week(4)), end_date::Union{Date, DateTime}=now(), get_all::Bool=false, page_size::UInt=UInt(50))::Vector{PullRequest}
+
+Get the pull requests for the given user. Can specify optional arguments for filtering. By default will only return the last 4 weeks of data.
+
+See also [`GetRepoPRs`](@ref)
+"""
 function GetUserPRs(user::AuthenticatedUser, base_address::AbstractString; state::AbstractString="ALL", start_date::Union{Date, DateTime}=(now()-Week(4)), end_date::Union{Date, DateTime}=now(), get_all::Bool=false, page_size::UInt=UInt(50))::Vector{PullRequest}
 	CheckPRState(state)
 	pr_date = now()
@@ -108,6 +120,13 @@ function GetUserPRs(user::AuthenticatedUser, base_address::AbstractString; state
 	
 end
 
+"""
+    GetRepoPRs(user::AuthenticatedUser, base_address::AbstractString, repo::Repository; state::AbstractString="ALL", start_date::Union{Date, DateTime}=(now()-Week(4)), end_date::Union{Date, DateTime}=now(), get_all::Bool=false, page_size::UInt=UInt(50))::Vector{PullRequest}
+
+Get the pull requests for the given repository. Can specify optional arguments for filtering. By default will only return the last 4 weeks of data.
+
+See also [`GetUserPRs`](@ref)
+"""
 function GetRepoPRs(user::AuthenticatedUser, base_address::AbstractString, repo::Repository; state::AbstractString="ALL", start_date::Union{Date, DateTime}=(now()-Week(4)), end_date::Union{Date, DateTime}=now(), get_all::Bool=false, page_size::UInt=UInt(50))::Vector{PullRequest}
 	CheckPRState(state)
 	pr_date = now()
@@ -155,6 +174,9 @@ end
 function Person(data::Dict{String, Any})::Person
 	return Person(data["name"], get(data, "emailAddress", "N/A"), data["displayName"])
 end
+
+parse(::Type{Person}, x::Dict{String, Any}) = Person(x)
+
 function GetReviewers(data::Dict{String, Any})::AbstractDict{Person, ReviewStatus}
 	reviewers = Dict{Person, ReviewStatus}()
 	r = data["reviewers"]
@@ -188,6 +210,11 @@ function GetAllPeopleOnPR(pr::PullRequest)
 	push!(people, pr.author)
 end
 
+"""
+    GetRole(username::String, pr::PullRequest)::ParticipationType
+
+Returns the role of the person with the given username on the given pull request. Returns `NotOnPR` if the person does not appear on the pull request.
+"""
 function GetRole(username::String, pr::PullRequest)::ParticipationType
 	reviewers = keys(pr.reviewers)
 	participants = pr.participants
@@ -203,6 +230,12 @@ function GetRole(username::String, pr::PullRequest)::ParticipationType
 	end
 end
 
+
+"""
+    GetRole(username::String, pr::PullRequest)::ParticipationType
+
+Returns the person's role on the pull request. Returns `NotOnPR` if the person does not appear on the pull request.
+"""
 function GetRole(person::Person, pr::PullRequest)::ParticipationType
 	reviewers = keys(pr.reviewers)
 	participants = pr.participants
