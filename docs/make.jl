@@ -5,7 +5,7 @@ DocMeta.setdocmeta!(Bitbucket, :DocTestSetup, :(using Bitbucket); recursive=true
 
 makedocs(;
     modules=[Bitbucket],
-    authors="Conrad Wiebe",
+    authors="Conrad Wiebe <miniging13@gmail.com",
     repo="https://github.com/Cyrannosaurus/Bitbucket.jl/blob/{commit}{path}#{line}",
     sitename="Bitbucket.jl",
     format=Documenter.HTML(;
@@ -20,6 +20,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/Cyrannosaurus/Bitbucket.jl",
+    repo="github.com/Cyrannosaurus/Bitbucket.jl.git",
     devbranch="main",
 )

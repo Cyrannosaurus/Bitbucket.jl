@@ -72,6 +72,7 @@ struct PullRequest
 	created_date::DateTime
 	updated_date::DateTime
 	repo::Repository
+	id::String
 end
 
 """
@@ -150,6 +151,8 @@ function GetRepoPRs(user::AuthenticatedUser, base_address::AbstractString, repo:
 	end 
 end
 
+function GetPRComments(user::AuthenticatedUser, base_address::AbstractString, repo::Repository, pull_request_id::String;)
+
 function ShortenDisplayName(name::AbstractString)::AbstractString
 	names = split(name)
 	if length(names) > 1
@@ -172,7 +175,11 @@ function EncodeReviewStatus(review_status::String)::ReviewStatus
 end
 
 function Person(data::Dict{String, Any})::Person
-	return Person(data["name"], get(data, "emailAddress", "N/A"), data["displayName"])
+	email = get(data, "emailAddress", "N/A")
+	if email === nothing
+		email = "N/A"
+	end
+	return Person(data["name"], email, data["displayName"])
 end
 
 parse(::Type{Person}, x::Dict{String, Any}) = Person(x)
