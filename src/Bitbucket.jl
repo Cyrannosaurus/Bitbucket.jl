@@ -151,8 +151,6 @@ function GetRepoPRs(user::AuthenticatedUser, base_address::AbstractString, repo:
 	end 
 end
 
-function GetPRComments(user::AuthenticatedUser, base_address::AbstractString, repo::Repository, pull_request_id::String;)
-
 function ShortenDisplayName(name::AbstractString)::AbstractString
 	names = split(name)
 	if length(names) > 1
